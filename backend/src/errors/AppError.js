@@ -10,6 +10,7 @@ export class AppError extends Error {
         this.name = "AppError";
         this.statusCode = statusCode;
         this.code = code;
+        this.details = options.details;
         this.isOperational = true;
     }
 }

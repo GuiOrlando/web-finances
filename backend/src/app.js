@@ -2,6 +2,8 @@ import express from "express";
 import helmet from "helmet";
 
 import healthRoutes from "./routes/healthRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
@@ -16,6 +18,8 @@ app.use(
 );
 
 app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 

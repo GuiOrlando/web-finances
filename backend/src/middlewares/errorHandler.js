@@ -23,10 +23,16 @@ export function errorHandler(error, req, res, next) {
         error: error.stack,
     });
 
-    return res.status(statusCode).json({
+    const response = {
         error: {
             code,
             message,
         },
-    });
+    };
+
+    if (isOperationalError && error.details) {
+        response.error.details = error.details;
+    }
+
+    return res.status(statusCode).json(response);
 }
