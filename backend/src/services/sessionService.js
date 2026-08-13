@@ -1,7 +1,14 @@
 import { createHash, randomBytes, } from "node:crypto";
 
 import { authConfig } from "../config/auth.js";
-import { createSession, findActiveSessionByTokenHash, revokeSessionByTokenHash } from "../repositories/sessionRepository.js";
+import {
+    cleanupOldSessions,
+    createSession,
+    findActiveSessionByTokenHash,
+    revokeAllSessionsByUserId,
+    revokeSessionByTokenHash,
+    touchSession,
+} from "../repositories/sessionRepository.js";
 
 export function hashSessionToken(token) {
     return createHash("sha256")
@@ -30,19 +37,17 @@ export async function createUserSession(usuarioId) {
 
     const tokenHash = hashSessionToken(token);
 
-    const expiresAt = new Date(
-        Date.now() + authConfig.sessionTtlMs
-    );
-
     await createSession({
         usuarioId,
         tokenHash,
-        expiraEm: formatDateForMySQL(expiresAt),
+        ttlSeconds:
+            authConfig.sessionTtlSeconds,
     });
 
     return {
         token,
-        maxAge: authConfig.sessionTtlMs,
+        maxAge:
+            authConfig.sessionTtlMs,
     };
 }
 
@@ -53,19 +58,28 @@ export async function getAuthenticatedSession(token) {
 
     const tokenHash = hashSessionToken(token);
     const session =
-        await findActiveSessionByTokenHash(tokenHash);
+        await findActiveSessionByTokenHash(
+            tokenHash,
+            authConfig
+                .sessionIdleTimeoutMinutes
+        );
 
     if (!session) {
         return null;
     }
 
+    await touchSession(
+        session.sessao_id
+    );
+
     return {
-        sessionId: session.sessao_id,
+        sessionId:
+            session.sessao_id,
 
         user: {
             id: session.usuario_id,
             nome: session.nome,
-            email: session.emailm
+            email: session.email,
         },
     };
 }
@@ -78,4 +92,12 @@ export async function revokeUserSession(token) {
     const tokenHash = hashSessionToken(token);
 
     return revokeSessionByTokenHash(tokenHash);
+}
+
+export async function revokeAllUserSessions(usuarioId) {
+    return revokeAllSessionsByUserId(usuarioId);
+}
+
+export async function cleanupSessions() {
+    return cleanupOldSessions();
 }

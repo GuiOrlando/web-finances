@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, logout, me, register } from "../controllers/authController.js";
+import { login, logout, logoutAll, me, register } from "../controllers/authController.js";
 import { validateBody } from "../middlewares/validate.js";
 import { authRateLimiter } from "../middlewares/authRateLimiter.js";
 import { loginSchema, registerSchema, } from "../validators/authSchema.js";
@@ -30,6 +30,12 @@ router.get(
 router.post(
     "/logout",
     logout
+);
+
+router.post(
+    "/logout-all",
+    requireAuth,
+    logoutAll
 );
 
 export default router;

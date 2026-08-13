@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch --env-file=.env src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "sessions:cleanup": "node --env-file=.env src/scripts/cleanupSessions.js"
   },
   "dependencies": {
     "argon2": "^0.45.1",

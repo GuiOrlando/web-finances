@@ -1,8 +1,21 @@
+const SESSION_TTL_MS =
+    8 * 60 * 60 * 1000;
+
 export const authConfig = Object.freeze({
-    sessionCookieName: "web_finances_session",
+    sessionCookieName:
+        "web_finances_session",
 
     sessionTtlMs:
-        7 * 24 * 60 * 60 * 1000,
+        SESSION_TTL_MS,
 
-    sessionTokenBytes: 32,
+    sessionTtlSeconds:
+        Math.floor(
+            SESSION_TTL_MS / 1000
+        ),
+
+    sessionIdleTimeoutMinutes:
+        30,
+
+    sessionTokenBytes:
+        32,
 });
