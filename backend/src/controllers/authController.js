@@ -1,5 +1,5 @@
 import { loginUser, registerUser, } from "../services/authService.js";
-
+import { revokeUserSession } from "../services/sessionService.js";
 import { authConfig } from "../config/auth.js";
 import { env } from "../config/env.js";
 
@@ -50,4 +50,48 @@ export async function login(req, res) {
         user,
         },
     });
+}
+
+export async function me(req, res) {
+    res.set(
+        "Cache-Control",
+        "no-store"
+    );
+
+    return res.status(200).json({
+        data: {
+            user: req.auth.user,
+        },
+    });
+}
+
+export async function logout(req, res) {
+    const token = req.cookies?.[
+        authConfig.sessionCookieName
+    ];
+
+    if (token) {
+        await revokeUserSession(token);
+    }
+
+    res.clearCookie(
+        authConfig.sessionCookieName,
+        {
+            httpOnly: true,
+
+            secure:
+                env.nodeEnv === "production",
+
+            sameSite: "lax",
+
+            path: "/",
+        }
+    );
+
+    res.set(
+        "Cache-Control",
+        "no-store"
+    );
+
+    return res.status(204).send();
 }

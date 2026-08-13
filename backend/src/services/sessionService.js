@@ -1,9 +1,9 @@
 import { createHash, randomBytes, } from "node:crypto";
 
 import { authConfig } from "../config/auth.js";
-import { createSession } from "../repositories/sessionRepository.js";
+import { createSession, findActiveSessionByTokenHash, revokeSessionByTokenHash } from "../repositories/sessionRepository.js";
 
-function hashSessionToken(token) {
+export function hashSessionToken(token) {
     return createHash("sha256")
         .update(token)
         .digest("hex");
@@ -14,6 +14,13 @@ function formatDateForMySQL(date) {
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
+}
+
+function isValidSessionToken(token) {
+    return (
+        typeof token === "string" &&
+        /^[A-Za-z0-9_-]{43}$/.test(token)
+    );
 }
 
 export async function createUserSession(usuarioId) {
@@ -37,4 +44,38 @@ export async function createUserSession(usuarioId) {
         token,
         maxAge: authConfig.sessionTtlMs,
     };
+}
+
+export async function getAuthenticatedSession(token) {
+    if (!isValidSessionToken(token)) {
+        return null;
+    }
+
+    const tokenHash = hashSessionToken(token);
+    const session =
+        await findActiveSessionByTokenHash(tokenHash);
+
+    if (!session) {
+        return null;
+    }
+
+    return {
+        sessionId: session.sessao_id,
+
+        user: {
+            id: session.usuario_id,
+            nome: session.nome,
+            email: session.emailm
+        },
+    };
+}
+
+export async function revokeUserSession(token) {
+    if (!isValidSessionToken(token)) {
+        return false;
+    }
+
+    const tokenHash = hashSessionToken(token);
+
+    return revokeSessionByTokenHash(tokenHash);
 }
