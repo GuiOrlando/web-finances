@@ -4,6 +4,7 @@ const requiredVariables = [
     "DB_USER",
     "DB_PASSWORD",
     "DB_NAME",
+    "FRONTEND_ORIGIN",
 ];
 
 for (const variable of requiredVariables) {
@@ -29,6 +30,9 @@ export const env = Object.freeze({
     nodeEnv: process.env.NODE_ENV ?? "development",
 
     port,
+
+    frontendOrigin:
+        process.env.FRONTEND_ORIGIN,
 
     database: {
         host: process.env.DB_HOST,

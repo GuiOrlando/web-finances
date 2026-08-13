@@ -12,7 +12,7 @@ async function startServer() {
 
         server = app.listen(env.port, () => {
             console.log(
-                `API disponível e, http://localhost:${env.port}`
+                `API disponível em http://localhost:${env.port}`
             );
         });
     } catch (error) {
