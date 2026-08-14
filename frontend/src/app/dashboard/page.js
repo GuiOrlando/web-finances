@@ -100,6 +100,13 @@ export default function DashboardPage() {
                             Contas
                         </Link>
 
+                        <Link
+                            href="/categories"
+                            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--background)]"
+                        >
+                            Categorias
+                        </Link>
+
                         <button
                             type="button"
                             onClick={handleLogout}
