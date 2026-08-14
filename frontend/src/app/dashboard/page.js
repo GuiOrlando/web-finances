@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "../../services/api.js";
+import Link from "next/link";
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -91,13 +92,22 @@ export default function DashboardPage() {
                         </h1>
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                    >
-                        Sair
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href="/accounts"
+                            className="rounded-lg bg-[var(--blue)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                        >
+                            Contas
+                        </Link>
+
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--foreground)]"
+                        >
+                            Sair
+                        </button>
+                    </div>
                 </div>
             </header>
 
