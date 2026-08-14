@@ -8,6 +8,7 @@ import { corsOptions } from "./config/cors.js";
 import healthRoutes from "./routes/healthRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 import { csrfProtection } from "./middlewares/csrfProtection.js";
 import { notFound } from "./middlewares/notFound.js";
@@ -43,6 +44,11 @@ app.use(
 app.use(
   "/api/accounts",
   accountRoutes
+);
+
+app.use(
+    "/api/categories",
+    categoryRoutes
 );
 
 app.use(notFound);
