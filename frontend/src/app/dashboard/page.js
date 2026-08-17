@@ -107,6 +107,13 @@ export default function DashboardPage() {
                             Categorias
                         </Link>
 
+                        <Link
+                            href="/transactions"
+                            className="rounded-lg bg-[var(--blue)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                        >
+                            Transações
+                        </Link>
+
                         <button
                             type="button"
                             onClick={handleLogout}
