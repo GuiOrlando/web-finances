@@ -11,8 +11,8 @@ const currencyFormatter =
     new Intl.NumberFormat(
         "pt-BR",
         {
-        style: "currency",
-        currency: "BRL",
+            style: "currency",
+            currency: "BRL",
         }
     );
 
@@ -22,6 +22,18 @@ export default function AccountCard({
     onDeactivate,
     disabled,
 }) {
+    const currentBalance = Number(
+        account.saldoAtual ??
+        account.saldoInicial
+    );
+
+    const initialBalance = Number(
+        account.saldoInicial
+    );
+
+    const negativeBalance =
+        currentBalance < 0;
+
     return (
         <article className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
             <div className="flex items-start justify-between gap-4">
@@ -44,16 +56,34 @@ export default function AccountCard({
 
             <div className="mt-6">
                 <p className="text-sm text-[var(--muted)]">
-                    Saldo inicial
+                    Saldo atual
                 </p>
 
-                <p className="mt-1 text-2xl font-bold text-[var(--foreground)]">
+                <p
+                    className={`mt-1 text-2xl font-bold ${
+                        negativeBalance
+                            ? "text-[var(--red)]"
+                            : "text-[var(--foreground)]"
+                    }`}
+                >
                     {currencyFormatter.format(
-                        Number(
-                            account.saldoInicial
-                        )
+                        currentBalance
                     )}
                 </p>
+            </div>
+
+            <div className="mt-4 rounded-lg bg-[var(--background)] px-4 py-3">
+                <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm text-[var(--muted)]">
+                        Saldo inicial
+                    </span>
+
+                    <span className="text-sm font-medium text-[var(--foreground)]">
+                        {currencyFormatter.format(
+                            initialBalance
+                        )}
+                    </span>
+                </div>
             </div>
 
             <div className="mt-6 flex gap-3 border-t border-[var(--border)] pt-4">
