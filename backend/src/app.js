@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import { csrfProtection } from "./middlewares/csrfProtection.js";
 import { notFound } from "./middlewares/notFound.js";
@@ -55,6 +56,11 @@ app.use(
 app.use(
     "/api/transactions",
     transactionRoutes
+);
+
+app.use(
+    "/api/dashboard",
+    dashboardRoutes
 );
 
 app.use(notFound);
